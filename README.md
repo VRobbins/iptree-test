@@ -39,7 +39,7 @@ Maximum resident memory is the memory used by the tree
 ### Steps to gather search metrics
 
 ```bash
-./msc --file=../testdata/ipv4/ipaddr_1000_shuffled.txt --ipv4 --search=../testdata/ipv4/ipaddr_orginal.txt
+./msc --file=../testdata/ipv4/ipaddr_1000_shuffled.txt --type=ipv4 --search=../testdata/ipv4/ipaddr_original.txt
 ```
 
 ```bash
@@ -53,29 +53,4 @@ testdata folder has lot of samples of ipv4 and ipv6 address to perform load and 
 
 
 Sample load and search metrics are here: https://verizondigital.github.io/waflz/appendix.html#ip-trie-performance
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-	
-
-
-
 
