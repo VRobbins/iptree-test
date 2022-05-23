@@ -6,12 +6,15 @@ import argparse
 
 
 
-def generate_ipv4(a_range, a_file):
+def generate_ipv4(a_range, a_file,a_cidr_bool):
 	MAX_IPV4 = ipaddress.IPv4Address._ALL_ONES
 	l_file = open(a_file, "a")
 	for i in range(a_range):
 		val = ipaddress.IPv4Address._string_from_ip_int(random.randint(0, MAX_IPV4))
 		l_file.write(val)
+		if(a_cidr_bool):
+			l_file.write("/")
+			l_file.write(str(random.randint(24,32)))
 		l_file.write('\n')
 
 
@@ -33,6 +36,13 @@ def main():
 							  '--ipv4',
 							  dest ='ipv4',
 							  help = 'generate ipv4 address',
+							  action = 'store_true',
+							  default = None,
+							  required = False)
+	l_arg_parser.add_argument('-cidr',
+							  '--cidr',
+							  dest ='cidr',
+							  help = 'generate cidr address',
 							  action = 'store_true',
 							  default = None,
 							  required = False)
@@ -60,7 +70,7 @@ def main():
 	l_args = l_arg_parser.parse_args()
 
 	if l_args.ipv4:
-		generate_ipv4(l_args.num, l_args.filename)
+		generate_ipv4(l_args.num, l_args.filename, l_args.cidr)
 	elif l_args.ipv6:
 		generate_ipv6(l_args.num, l_args.filename)
 	else:

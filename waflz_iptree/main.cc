@@ -171,7 +171,7 @@ int main(int argc, char** argv)
                 l_s = l_nms->contains(ao_output, l_line.c_str(), l_line.length());
                 if(ao_output)
                 {
-                    printf("%d\n", ao_output);
+                    //printf("%d\n", ao_output);
                 }
         }
         l_end = clock();
