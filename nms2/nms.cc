@@ -89,8 +89,8 @@ namespace ns_waflz
 //: \param:   TODO
 //: ----------------------------------------------------------------------------
 nms::nms():
-        m_ipv4_mask_map(NULL),
-        m_ipv6_mask_map(NULL)
+        ipv4_arr(new ipv4_set_t[33]),
+        ipv6_arr(new ipv6_set_t[129])
 {}
 //: ----------------------------------------------------------------------------
 //: \details: TODO
@@ -99,8 +99,8 @@ nms::nms():
 //: ----------------------------------------------------------------------------
 nms::~nms()
 {
-        if(m_ipv4_mask_map) { delete m_ipv4_mask_map; m_ipv4_mask_map = NULL;}
-        if(m_ipv6_mask_map) { delete m_ipv6_mask_map; m_ipv6_mask_map = NULL;}
+        if(ipv4_arr) { delete[] ipv4_arr; ipv4_arr = NULL;}
+        if(ipv6_arr) { delete[] ipv6_arr; ipv6_arr = NULL;}
 }
 //: ----------------------------------------------------------------------------
 //: \details: TODO
@@ -231,11 +231,11 @@ int32_t nms::add_ipv4_plain(const char *a_buf, uint32_t a_buf_len)
                 // TODO log reason???
                 return WAFLZ_STATUS_ERROR;
         }
-        if(!m_ipv4_mask_map)
+        if(!ipv4_arr)
         {
-                m_ipv4_mask_map = new ipv4_mask_map_t();
+                ipv4_arr = new ipv4_set_t[33];
         }
-        (*m_ipv4_mask_map)[32].insert(l_in.s_addr);
+        ipv4_arr[32].insert(l_in.s_addr);
         return WAFLZ_STATUS_OK;
 }
 //: ----------------------------------------------------------------------------
@@ -306,11 +306,11 @@ int32_t nms::add_ipv4_cidr(const char *a_buf, uint32_t a_buf_len)
         // -------------------------------------------------
         // add
         // -------------------------------------------------
-        if(!m_ipv4_mask_map)
+        if(!ipv4_arr)
         {
-                m_ipv4_mask_map = new ipv4_mask_map_t();
+                ipv4_arr = new ipv4_set_t[33];
         }
-        (*m_ipv4_mask_map)[l_bits].insert(l_masked_addr);
+        ipv4_arr[l_bits].insert(l_masked_addr);
         return WAFLZ_STATUS_OK;
 }
 //: ----------------------------------------------------------------------------
@@ -341,11 +341,11 @@ int32_t nms::add_ipv6_plain(const char *a_buf, uint32_t a_buf_len)
                 // TODO log reason???
                 return WAFLZ_STATUS_ERROR;
         }
-        if(!m_ipv6_mask_map)
+        if(!ipv6_arr)
         {
-                m_ipv6_mask_map = new ipv6_mask_map_t();
+                ipv6_arr = new ipv6_set_t[129];
         }
-        (*m_ipv6_mask_map)[128].insert(l_in6);
+        ipv6_arr[128].insert(l_in6);
         return WAFLZ_STATUS_OK;
 }
 //: ----------------------------------------------------------------------------
@@ -434,11 +434,11 @@ int32_t nms::add_ipv6_cidr(const char *a_buf, uint32_t a_buf_len)
         // -------------------------------------------------
         // add
         // -------------------------------------------------
-        if(!m_ipv6_mask_map)
+        if(!ipv6_arr)
         {
-                m_ipv6_mask_map = new ipv6_mask_map_t();
+                ipv6_arr = new ipv6_set_t[129];
         }
-        (*m_ipv6_mask_map)[l_bits].insert(l_masked_addr);
+        ipv6_arr[l_bits].insert(l_masked_addr);
         return WAFLZ_STATUS_OK;
 }
 //: ----------------------------------------------------------------------------
@@ -463,11 +463,6 @@ int32_t nms::add_ipv6(const char *a_buf, uint32_t a_buf_len)
 int32_t nms::contains_ipv4(bool &ao_match, const char *a_buf, uint32_t a_buf_len)
 {
         ao_match = false;
-        if(!m_ipv4_mask_map)
-        {
-                // error???
-                return WAFLZ_STATUS_OK;
-        }
         // convert to ipv4
         in_addr l_in;
         int l_s;
@@ -477,14 +472,10 @@ int32_t nms::contains_ipv4(bool &ao_match, const char *a_buf, uint32_t a_buf_len
                 // TODO log reason???
                 return WAFLZ_STATUS_ERROR;
         }
-        for(ipv4_mask_map_t::const_reverse_iterator i_m = m_ipv4_mask_map->rbegin();
-            i_m != m_ipv4_mask_map->rend();
-            ++i_m)
+        for(int l_bits=0; l_bits<32; ++l_bits)
         {
-                const int l_bits = i_m->first;
                 const uint32_t l_nm = (l_bits == 0) ? 0 : htonl(~((1 << (32 - l_bits)) - 1));
-                ipv4_set_t::const_iterator i_a = i_m->second.find(l_nm & l_in.s_addr);
-                if(i_a != i_m->second.end())
+                if( ipv4_arr[l_bits].find(l_nm & l_in.s_addr) != ipv4_arr[l_bits].end())
                 {
                         ao_match = true;
                         return WAFLZ_STATUS_OK;
@@ -500,7 +491,7 @@ int32_t nms::contains_ipv4(bool &ao_match, const char *a_buf, uint32_t a_buf_len
 int32_t nms::contains_ipv6(bool &ao_match, const char *a_buf, uint32_t a_buf_len)
 {
         ao_match = false;
-        if(!m_ipv6_mask_map)
+        if(!ipv4_arr)
         {
                 // error???
                 return WAFLZ_STATUS_OK;
@@ -513,12 +504,9 @@ int32_t nms::contains_ipv6(bool &ao_match, const char *a_buf, uint32_t a_buf_len
                 // TODO log reason???
                 return WAFLZ_STATUS_ERROR;
         }
-        for(ipv6_mask_map_t::const_reverse_iterator i_m = m_ipv6_mask_map->rbegin();
-            i_m != m_ipv6_mask_map->rend();
-            ++i_m)
+        for(int l_bits=0; l_bits<32; ++l_bits)
         {
                 in6_addr l_masked;
-                const int l_bits = i_m->first;
                 for (int i_c = 0; i_c < 4; ++i_c)
                 {
                         int32_t l_pos = l_bits - 32*i_c;
@@ -535,8 +523,7 @@ int32_t nms::contains_ipv6(bool &ao_match, const char *a_buf, uint32_t a_buf_len
                                 l_masked.s6_addr32[i_c] = l_in6.s6_addr32[i_c] & htonl(~((1 << (32 - l_bits + 32*i_c)) - 1));
                         }
                 }
-                ipv6_set_t::const_iterator i_a = i_m->second.find(l_masked);
-                if(i_a != i_m->second.end())
+                if(ipv6_arr[l_bits].find(l_masked) != ipv6_arr[l_bits].end())
                 {
                         ao_match = true;
                         return WAFLZ_STATUS_OK;

@@ -93,8 +93,10 @@ private:
         // -------------------------------------------------
         // private members
         // -------------------------------------------------
-        ipv4_mask_map_t *m_ipv4_mask_map;
-        ipv6_mask_map_t *m_ipv6_mask_map;
+        //ipv4_mask_map_t *m_ipv4_mask_map;
+        //ipv6_mask_map_t *m_ipv6_mask_map;
+        ipv4_set_t* ipv4_arr;
+        ipv6_set_t* ipv6_arr;
 };
 //: ----------------------------------------------------------------------------
 //: types
