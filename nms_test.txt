@@ -3,71 +3,71 @@ NEW TEST
 ----------------------------------------------------------------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 100 --------------------
 IPV4 | IPs only
-Search time:0.342830
+Search time:0.386329
 
 IPV4 | CIDR
-Search time:0.519163
+Search time:0.507654
 
 IPV6 | IPs only
-Search time:1.053759
+Search time:1.030077
 
 IPV6 | CIDR
-Search time:3.197073
+Search time:2.773520
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 1000 --------------------
 IPV4 | IPs only
-Search time:0.380758
+Search time:0.353199
 
 IPV4 | CIDR
-Search time:0.655807
+Search time:0.696497
 
 IPV6 | IPs only
-Search time:1.066564
+Search time:1.087773
 
 IPV6 | CIDR
-Search time:4.879740
+Search time:4.872290
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 10000 --------------------
 IPV4 | IPs only
-Search time:0.408366
+Search time:0.408841
 
 IPV4 | CIDR
-Search time:1.144351
+Search time:1.093519
 
 IPV6 | IPs only
-Search time:1.202526
+Search time:1.144425
 
 IPV6 | CIDR
-Search time:7.182139
+Search time:7.251238
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 100000 --------------------
 IPV4 | IPs only
-Search time:0.518409
+Search time:0.492087
 
 IPV4 | CIDR
-Search time:2.074647
+Search time:1.920152
 
 IPV6 | IPs only
-Search time:1.554541
+Search time:1.390543
 
 IPV6 | CIDR
-Search time:14.895191
+Search time:14.057321
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 1000000 --------------------
 IPV4 | IPs only
-Search time:1.207352
+Search time:1.190355
 
 IPV4 | CIDR
-Search time:7.421062
+Search time:7.212414
 
 IPV6 | IPs only
-Search time:2.071130
+Search time:2.044642
 
 IPV6 | CIDR
-Search time:35.985268
+Search time:36.619518
 
 --------------------------------------------------------
