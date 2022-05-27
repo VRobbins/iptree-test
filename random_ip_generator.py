@@ -18,12 +18,15 @@ def generate_ipv4(a_range, a_file,a_cidr_bool):
 		l_file.write('\n')
 
 
-def generate_ipv6(a_range, a_file):
+def generate_ipv6(a_range, a_file,a_cidr_bool):
 	MAX_IPV6 = ipaddress.IPv6Address._ALL_ONES
 	l_file = open(a_file, "a")
 	for i in range(a_range):
 		val = ipaddress.IPv6Address._string_from_ip_int(random.randint(0, MAX_IPV6))
 		l_file.write(val)
+		if(a_cidr_bool):
+			l_file.write("/")
+			l_file.write(str(random.randint(96,128)))
 		l_file.write('\n')
 
 def main():
@@ -72,7 +75,7 @@ def main():
 	if l_args.ipv4:
 		generate_ipv4(l_args.num, l_args.filename, l_args.cidr)
 	elif l_args.ipv6:
-		generate_ipv6(l_args.num, l_args.filename)
+		generate_ipv6(l_args.num, l_args.filename, l_args.cidr)
 	else:
 		print('provide args')
 

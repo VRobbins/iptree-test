@@ -119,7 +119,7 @@ int main(int argc, char** argv)
         l_s = ns_waflz::create_nms_from_file(&l_nms, l_file_load_str);
         if(l_s == STATUS_OK)
         {
-        	 printf("ip loaded succesfully\n");
+        	//printf("ip loaded succesfully\n");
         }
         else
         {
@@ -135,7 +135,7 @@ int main(int argc, char** argv)
             return 0;
         }
 
-        printf("Searching\n");
+        ///printf("Searching\n");
         double l_total_time;
         clock_t l_start, l_end;
         bool ao_output = false;
@@ -176,7 +176,7 @@ int main(int argc, char** argv)
         }
         l_end = clock();
         l_total_time = ((double)(l_end-l_start)) / CLOCKS_PER_SEC;
-        printf("time taken to search:%f\n", l_total_time);
+        printf("Search time:%f\n", l_total_time);
                 
 cleanup:
         if(l_nms != NULL)
