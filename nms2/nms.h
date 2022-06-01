@@ -67,6 +67,28 @@ private:
                                            sizeof(a.s6_addr)));
                 }
         };
+        /*
+        struct Hash {
+                size_t operator() (const in6_addr a) const {
+                        unsigned long val = 5381;
+                        for(int i = 0;i<16;++i) {
+                                val = ((val<<5)+val)+(int) a.s6_addr[i];
+                        }
+                        return val;
+                }
+        };
+        struct KeyEq {
+                bool operator() (in6_addr a, in6_addr b) const {
+                        for(int i=0;i<16;++i) {
+                                if(a.s6_addr[i]!=b.s6_addr[i])
+                                        return false;
+                        }
+                        return true;
+                }
+        };
+        typedef std::set<in_addr_t> ipv4_set_t;
+        typedef std::unordered_set<in6_addr, Hash, KeyEq> ipv6_set_t;
+        */
         // -------------------------------------------------
         // nested data structure:
         // outer map indexed by subnet mask bits, and inner
@@ -93,8 +115,6 @@ private:
         // -------------------------------------------------
         // private members
         // -------------------------------------------------
-        //ipv4_mask_map_t *m_ipv4_mask_map;
-        //ipv6_mask_map_t *m_ipv6_mask_map;
         ipv4_set_t* ipv4_arr;
         ipv6_set_t* ipv6_arr;
 };

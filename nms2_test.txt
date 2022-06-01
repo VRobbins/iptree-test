@@ -3,71 +3,71 @@ NEW TEST
 ----------------------------------------------------------------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 100 --------------------
 IPV4 | IPs only
-Search time:0.401765
+Search time:0.388208
 
 IPV4 | CIDR
-Search time:0.491407
+Search time:0.470388
 
 IPV6 | IPs only
-Search time:1.107430
+Search time:0.945824
 
 IPV6 | CIDR
-Search time:1.131138
+Search time:0.961537
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 1000 --------------------
 IPV4 | IPs only
-Search time:0.403251
+Search time:0.348227
 
 IPV4 | CIDR
-Search time:0.687413
+Search time:0.583239
 
 IPV6 | IPs only
-Search time:1.159870
+Search time:0.932964
 
 IPV6 | CIDR
-Search time:1.156706
+Search time:0.935921
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 10000 --------------------
 IPV4 | IPs only
-Search time:0.413045
+Search time:0.357411
 
 IPV4 | CIDR
-Search time:1.172360
+Search time:0.978086
 
 IPV6 | IPs only
-Search time:1.112472
+Search time:0.952822
 
 IPV6 | CIDR
-Search time:1.089992
+Search time:0.930421
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 100000 --------------------
 IPV4 | IPs only
-Search time:0.384304
+Search time:0.343107
 
 IPV4 | CIDR
-Search time:2.300125
+Search time:1.676006
 
 IPV6 | IPs only
-Search time:1.078207
+Search time:0.927562
 
 IPV6 | CIDR
-Search time:1.087255
+Search time:0.936971
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 1000000 --------------------
 IPV4 | IPs only
-Search time:0.391519
+Search time:0.352107
 
 IPV4 | CIDR
-Search time:7.277139
+Search time:6.129981
 
 IPV6 | IPs only
-Search time:1.070769
+Search time:0.915872
 
 IPV6 | CIDR
-Search time:1.136518
+Search time:0.965136
 
 --------------------------------------------------------

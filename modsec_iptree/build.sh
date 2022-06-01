@@ -1,1 +1,1 @@
-g++ -O2 main.cc msc_tree.cc -o msc
+g++ -O2 main.cc msc_tree.cc -o msc -fsanitize=address -fno-omit-frame-pointer
