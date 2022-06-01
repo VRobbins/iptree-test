@@ -1,0 +1,73 @@
+NEW TEST
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+-------------------- 1 Milllion Requests, ACL SIZE 100 --------------------
+IPV4 | IPs only
+Search time:0.164634
+
+IPV4 | CIDR
+Search time:0.211219
+
+IPV6 | IPs only
+Search time:0.472350
+
+IPV6 | CIDR
+Search time:0.441271
+
+--------------------------------------------------------
+-------------------- 1 Milllion Requests, ACL SIZE 1000 --------------------
+IPV4 | IPs only
+Search time:0.180951
+
+IPV4 | CIDR
+Search time:0.308340
+
+IPV6 | IPs only
+Search time:0.463064
+
+IPV6 | CIDR
+Search time:0.460400
+
+--------------------------------------------------------
+-------------------- 1 Milllion Requests, ACL SIZE 5000 --------------------
+IPV4 | IPs only
+Search time:0.180710
+
+IPV4 | CIDR
+Search time:0.357393
+
+IPV6 | IPs only
+Search time:0.480447
+
+IPV6 | CIDR
+Search time:0.451952
+
+--------------------------------------------------------
+-------------------- 1 Milllion Requests, ACL SIZE 10000 --------------------
+IPV4 | IPs only
+Search time:0.168647
+
+IPV4 | CIDR
+Search time:0.434180
+
+IPV6 | IPs only
+Search time:0.437049
+
+IPV6 | CIDR
+Search time:0.448334
+
+--------------------------------------------------------
+-------------------- 1 Milllion Requests, ACL SIZE 20000 --------------------
+IPV4 | IPs only
+Search time:0.171289
+
+IPV4 | CIDR
+Search time:0.518733
+
+IPV6 | IPs only
+Search time:0.513938
+
+IPV6 | CIDR
+Search time:0.539530
+
+--------------------------------------------------------

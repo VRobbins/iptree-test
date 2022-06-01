@@ -1,6 +1,6 @@
 /*
 * ModSecurity for Apache 2.x, http://www.modsecurity.org/
-* Copyright (c) 2004-2013 Trustwave Holdings, Inc. (http://www.trustwave.com/)
+* Copyright (c) 2015 - 2021 Trustwave Holdings, Inc. (http://www.trustwave.com/)
 *
 * You may not use this file except in compliance with
 * the License.  You may obtain a copy of the License at
@@ -12,28 +12,24 @@
 * directly using the email address security@modsecurity.org.
 */
 
-#ifndef __MSC_TREE_H__
-#define __MSC_TREE_H__
 
-#if 0
-#include "modsecurity.h"
-#else
-#ifndef DSOLOCAL
-#define DSOLOCAL
-#endif
-typedef struct _apr_pool_t {
-        int m_unused;
-} apr_pool_t;
-typedef struct _modsec_rec {
-        int m_unused;
-} modsec_rec;
-#endif
+/*
+ *
+ * TODO: This is an improved copy of the ModSecurity 2.9 file, this may need
+ * some other enhancements and/or fixes.
+ *
+ */
+
+#ifndef SRC_UTILS_MSC_TREE_H_
+#define SRC_UTILS_MSC_TREE_H_
+
 
 typedef struct CPTData CPTData;
 typedef struct TreePrefix TreePrefix;
 typedef struct TreeNode TreeNode;
 typedef struct CPTTree CPTTree;
 typedef struct TreeRoot TreeRoot;
+
 
 #define IPV4_TREE 0x1
 #define IPV6_TREE 0x2
@@ -54,6 +50,11 @@ typedef struct TreeRoot TreeRoot;
 #define NETMASK_8  0x8
 #define NETMASK_4  0x4
 #define NETMASK_2  0x2
+
+#define FALSE 0
+#define TRUE 1
+
+extern "C" {
 
 struct CPTData {
     unsigned char netmask;
@@ -77,7 +78,6 @@ struct TreeNode {
 
 struct CPTTree {
     int count;
-    apr_pool_t *pool;
     TreeNode *head;
 };
 
@@ -86,8 +86,21 @@ struct TreeRoot {
     CPTTree *ipv6_tree;
 };
 
-CPTTree  DSOLOCAL *CPTCreateRadixTree(apr_pool_t *pool);
-TreeNode DSOLOCAL *CPTIpMatch(modsec_rec *msr, unsigned char *ipdata, CPTTree *tree, int type);
-TreeNode DSOLOCAL *TreeAddIP(const char *buffer, CPTTree *tree, int type);
+CPTTree *CPTCreateRadixTree();
+TreeNode *CPTIpMatch(unsigned char *ipdata, CPTTree *tree, int type);
+TreeNode *TreeAddIP(const char *buffer, CPTTree *tree, int type);
 
-#endif /*__MSC_TREE_H__ */
+unsigned char is_netmask_v4(char *ip_strv4);
+
+unsigned char is_netmask_v6(char *ip_strv6);
+
+/** @ingroup ModSecurity_Legacy */
+int tree_contains_ip(TreeRoot *rtree,
+    const char *value, char **error_msg);
+
+int add_ip_from_param(const char *param, TreeRoot **rtree, char **error_msg);
+int ip_tree_from_param(const char *param, TreeRoot **rtree, char **error_msg);
+int create_radix_tree(TreeRoot **rtree, char **error_msg);
+}
+
+#endif  // SRC_UTILS_MSC_TREE_H_
