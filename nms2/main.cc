@@ -119,7 +119,7 @@ int main(int argc, char** argv)
         l_s = ns_waflz::create_nms_from_file(&l_nms, l_file_load_str);
         if(l_s == STATUS_OK)
         {
-        	//printf("ip loaded succesfully\n");
+        	printf("ip loaded succesfully\n");
         }
         else
         {
