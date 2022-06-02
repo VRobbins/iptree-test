@@ -1,0 +1,1 @@
+g++ -g3 -O3 main.cc nms.cc -o nms

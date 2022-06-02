@@ -1,4 +1,4 @@
-cd ./../waflz_iptree 
+cd ../waflz_iptree 
 ./build.sh
 cd -
 rm Results/nms_test.txt

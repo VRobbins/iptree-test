@@ -1,4 +1,4 @@
-cd ./../nms2 
+cd ../nms2 
 ./build.sh
 cd -
 rm Results/nms2_test.txt

@@ -1,4 +1,4 @@
-cd ./../modsec_iptree 
+cd ../modsec_iptree 
 ./build.sh
 cd -
 rm Results/msc_test.txt
