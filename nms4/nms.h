@@ -25,6 +25,9 @@
 //: includes
 //: ----------------------------------------------------------------------------
 #include <set>
+#include <utility>
+#include <unordered_set>
+#include <functional>
 #include <unordered_set>
 #include <list>
 #include <netinet/in.h>
@@ -68,25 +71,18 @@ private:
                 }
         };
         struct Hash {
-                size_t operator() (const in6_addr a) const {
-                        unsigned long val = 5381;
-                        for(int i = 0;i<16;++i) {
-                                val = ((val<<5)+val)+(int) a.s6_addr[i];
-                        }
-                        return val;
+                size_t operator() (const std::pair<char, uint32_t> pair) const {
+                        std::hash<int> hash;
+                        return (hash(pair.first)+hash(pair.second))/2;
                 }
         };
-        struct KeyEq {
-                bool operator() (in6_addr a, in6_addr b) const {
-                        for(int i=0;i<16;++i) {
-                                if(a.s6_addr[i]!=b.s6_addr[i])
-                                        return false;
-                        }
-                        return true;
+        /*struct KeyEq {
+                bool operator() (const std::pair<char, uint32_t> pair1, const std::pair<char, uint32_t> pair2) const {
+                        return pair1.first == pair2.first && pair1.second==pair2.second;
                 }
-        };
-        typedef std::set<in_addr_t> ipv4_set_t;
-        typedef std::unordered_set<in6_addr, Hash, KeyEq> ipv6_set_t;
+        };*/
+        typedef std::unordered_set<std::pair<char,uint32_t>, Hash> ipv4_set_t;
+        typedef std::set<in6_addr, cmp_in6_addr> ipv6_set_t;
         // -------------------------------------------------
         // nested data structure:
         // outer map indexed by subnet mask bits, and inner
@@ -111,7 +107,7 @@ private:
         // -------------------------------------------------
         // private members
         // -------------------------------------------------
-        ipv4_set_t** ipv4_arr;
+        ipv4_set_t ipv4_arr;
         ipv6_set_t* ipv6_arr;
 };
 //: ----------------------------------------------------------------------------

@@ -5,109 +5,109 @@ NEW TEST
 IPV4 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.254831
+time taken to search:0.234343
 
 IPV4 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.267484
+time taken to search:0.228589
 
 IPV6 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.535184
+time taken to search:0.442428
 
 IPV6 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.532818
+time taken to search:0.472175
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 1000 --------------------
 IPV4 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.294197
+time taken to search:0.266375
 
 IPV4 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.325420
+time taken to search:0.312075
 
 IPV6 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.562401
+time taken to search:0.492401
 
 IPV6 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.610736
+time taken to search:0.535601
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 5000 --------------------
 IPV4 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.351804
+time taken to search:0.287939
 
 IPV4 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.415265
+time taken to search:0.319443
 
 IPV6 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.662195
+time taken to search:0.522714
 
 IPV6 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.698588
+time taken to search:0.582674
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 10000 --------------------
 IPV4 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.375502
+time taken to search:0.312525
 
 IPV4 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.413568
+time taken to search:0.341363
 
 IPV6 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.657234
+time taken to search:0.575130
 
 IPV6 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.707713
+time taken to search:0.612279
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 20000 --------------------
 IPV4 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.407003
+time taken to search:0.359033
 
 IPV4 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.452960
+time taken to search:0.409994
 
 IPV6 | IPs only
 Loading done
 Searching  ips
-time taken to search:0.758847
+time taken to search:0.569025
 
 IPV6 | CIDR
 Loading done
 Searching  ips
-time taken to search:0.844227
+time taken to search:0.627776
 
 --------------------------------------------------------

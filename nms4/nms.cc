@@ -89,7 +89,6 @@ namespace ns_waflz
 //: \param:   TODO
 //: ----------------------------------------------------------------------------
 nms::nms():
-        ipv4_arr(new ipv4_set_t*[33]),
         ipv6_arr(new ipv6_set_t[129])
 {}
 //: ----------------------------------------------------------------------------
@@ -99,7 +98,6 @@ nms::nms():
 //: ----------------------------------------------------------------------------
 nms::~nms()
 {
-        if(*ipv4_arr) { delete[] *ipv4_arr; *ipv4_arr = NULL; ipv4_arr=NULL;}
         if(ipv6_arr) { delete[] ipv6_arr; ipv6_arr = NULL;}
 }
 //: ----------------------------------------------------------------------------
@@ -231,14 +229,7 @@ int32_t nms::add_ipv4_plain(const char *a_buf, uint32_t a_buf_len)
                 // TODO log reason???
                 return WAFLZ_STATUS_ERROR;
         }
-        if(!ipv4_arr)
-        {
-                ipv4_arr = new ipv4_set_t*[33];
-        }
-        if(!ipv4_arr[32]) {
-                ipv4_arr[32] = new ipv4_set_t;
-        }
-        ipv4_arr[32]->insert(l_in.s_addr);
+        ipv4_arr.insert(std::make_pair((char) 32, (uint32_t) l_in.s_addr));
         return WAFLZ_STATUS_OK;
 }
 //: ----------------------------------------------------------------------------
@@ -309,14 +300,7 @@ int32_t nms::add_ipv4_cidr(const char *a_buf, uint32_t a_buf_len)
         // -------------------------------------------------
         // add
         // -------------------------------------------------
-        if(!ipv4_arr)
-        {
-                ipv4_arr = new ipv4_set_t*[33];
-        }
-        if(!ipv4_arr[l_bits]) {
-                ipv4_arr[l_bits] = new ipv4_set_t;
-        }
-        ipv4_arr[l_bits]->insert(l_masked_addr);
+        ipv4_arr.insert(std::make_pair((char) l_bits, (uint32_t) l_masked_addr));
         return WAFLZ_STATUS_OK;
 }
 //: ----------------------------------------------------------------------------
@@ -481,9 +465,7 @@ int32_t nms::contains_ipv4(bool &ao_match, const char *a_buf, uint32_t a_buf_len
         for(int l_bits=0; l_bits<32; ++l_bits)
         {
                 const uint32_t l_nm = (l_bits == 0) ? 0 : htonl(~((1 << (32 - l_bits)) - 1));
-                if(!ipv4_arr[l_bits])
-                        continue;
-                if( ipv4_arr[l_bits]->find(l_nm & l_in.s_addr) != ipv4_arr[l_bits]->end())
+                if( ipv4_arr.find(std::make_pair((char) l_bits , (uint32_t) l_nm & l_in.s_addr)) != ipv4_arr.end())
                 {
                         ao_match = true;
                         return WAFLZ_STATUS_OK;
@@ -499,11 +481,6 @@ int32_t nms::contains_ipv4(bool &ao_match, const char *a_buf, uint32_t a_buf_len
 int32_t nms::contains_ipv6(bool &ao_match, const char *a_buf, uint32_t a_buf_len)
 {
         ao_match = false;
-        if(!ipv4_arr)
-        {
-                // error???
-                return WAFLZ_STATUS_OK;
-        }
         in6_addr l_in6;
         int l_s;
         l_s = inet_pton(AF_INET6, a_buf, &l_in6);
