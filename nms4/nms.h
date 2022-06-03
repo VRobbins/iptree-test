@@ -27,8 +27,6 @@
 #include <set>
 #include <utility>
 #include <unordered_set>
-#include <functional>
-#include <unordered_set>
 #include <list>
 #include <netinet/in.h>
 #include <string.h>
@@ -72,8 +70,7 @@ private:
         };
         struct Hash {
                 size_t operator() (const std::pair<char, uint32_t> pair) const {
-                        std::hash<int> hash;
-                        return (hash(pair.first)+hash(pair.second))/2;
+                        return pair.second;
                 }
         };
         /*struct KeyEq {
