@@ -226,7 +226,7 @@ int32_t nms::add_ipv4_plain(const char *a_buf, uint32_t a_buf_len)
         struct in_addr l_in;
         int l_s;
         l_s = inet_pton(AF_INET, a_buf, &l_in);
-        bool ao_redundant=FALSE;
+        bool ao_redundant=false;
         contains_ipv4(ao_redundant, a_buf, a_buf_len);
         if(ao_redundant) {
                 return WAFLZ_STATUS_OK;
@@ -338,7 +338,7 @@ int32_t nms::add_ipv4(const char *a_buf, uint32_t a_buf_len)
 //: ----------------------------------------------------------------------------
 int32_t nms::add_ipv6_plain(const char *a_buf, uint32_t a_buf_len)
 {
-        bool ao_redundant=FALSE;
+        bool ao_redundant=false;
         contains_ipv4(ao_redundant, a_buf, a_buf_len);
         if(ao_redundant) {
                 return WAFLZ_STATUS_OK;
