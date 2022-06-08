@@ -649,14 +649,21 @@ int32_t create_nms_from_file(nms **ao_nms, const std::string &a_file)
                         continue;
                 }
                 int32_t l_s;
-                nms_vec.push_back(l_line);
+                l_s = l_nms->add(l_line.c_str(), l_line.length());
+                if(l_s != WAFLZ_STATUS_OK)
+                {
+                        if(l_nms) { delete l_nms; l_nms = NULL;}
+                        return WAFLZ_STATUS_ERROR;
+                }
+                //int32_t l_s;
+                //nms_vec.push_back(l_line);
                 //NDBG_PRINT("READLINE: %s\n", l_line.c_str());
         }
-        sort(nms_vec.begin(), nms_vec.end());
+        /*sort(nms_vec.begin(), nms_vec.end());
         for(int i = 0;i<nms_vec.size();++i) {
                 l_nms->add(nms_vec[i].c_str(), nms_vec[i].length());
                 //std::cout<<nms_vec[i]<<std::endl;
-        }
+        }*/
         *ao_nms = l_nms;
         //std::cout<<l_nms->currentRSS()<<std::endl;
         return WAFLZ_STATUS_OK;
