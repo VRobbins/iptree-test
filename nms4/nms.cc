@@ -632,6 +632,7 @@ int32_t create_nms_from_file(nms **ao_nms, const std::string &a_file)
                 //NDBG_PRINT("READLINE: %s\n", l_line.c_str());
         }
         *ao_nms = l_nms;
+        std::cout<<l_nms->currentRSS()<<std::endl;
         return WAFLZ_STATUS_OK;
 }
 //: ----------------------------------------------------------------------------

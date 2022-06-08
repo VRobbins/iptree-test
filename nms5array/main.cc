@@ -1,19 +1,12 @@
-#include <iostream>
-#include <unistd.h>
-#include <sys/resource.h>
-#include <mach/mach.h>
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <string>
 #include <errno.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <getopt.h>
 #include <time.h>
 #include <algorithm>
-#include "msc_tree.h"
+#include "nms.h"
 
 #define MAX_READLINE_SIZE 1024
 #ifndef STATUS_OK
@@ -22,27 +15,12 @@
 #ifndef STATUS_ERROR
 #define STATUS_ERROR -1
 #endif
-//: ----------------------------------------------------------------------------
-//:
-//: ----------------------------------------------------------------------------
-//: ----------------------------------------------------------------------------
-//:
-//: ----------------------------------------------------------------------------
+
 //: ----------------------------------------------------------------------------
 //: \details:  TODO
 //: \return:   TODO
 //: \param:    TODO
 //: ----------------------------------------------------------------------------
-size_t currentRSS()
-    {
-        struct mach_task_basic_info info;
-        mach_msg_type_number_t count = MACH_TASK_BASIC_INFO_COUNT;
-        if (task_info(mach_task_self(), MACH_TASK_BASIC_INFO, (task_info_t)&info, &count) == KERN_SUCCESS)
-            return (size_t)info.resident_size;
-        return (size_t)0; /* query failed */
-    }
-
-
 void print_usage(FILE* a_stream, int a_exit_code)
 {
         fprintf(a_stream, "Usage: ip_tree [OPTIONS]\n");
@@ -51,8 +29,7 @@ void print_usage(FILE* a_stream, int a_exit_code)
         fprintf(a_stream, "OPTIONS:\n");
         fprintf(a_stream, "  -h, --help       Display this help and exit.\n");
         fprintf(a_stream, "  -f, --file       Input file containinf ip's to load.\n");
-        fprintf(a_stream, "  -s, --search     Input file\n");
-        fprintf(a_stream, "  -t, --type       type of ip's in the file :ipv4 or ipv6");
+        fprintf(a_stream, "  -s, --search     Input file containing ip's to search\n");
         exit(a_exit_code);
 }
 //: ----------------------------------------------------------------------------
@@ -60,10 +37,7 @@ void print_usage(FILE* a_stream, int a_exit_code)
 //: ----------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-         char *l_err_msg;
-         TreeRoot *l_tree;
          int32_t l_s = STATUS_OK;
-         l_s = create_radix_tree(&l_tree, &l_err_msg);
         // -----------------------------------------
         // process args
         // -----------------------------------------
@@ -72,19 +46,18 @@ int main(int argc, char** argv)
          std::string l_file_load_str;
          std::string l_file_search_str;
          int l_option_index = 0;
-         std::string l_type;
-         uint32_t l_size = 0;
+         //char* l_search_ip = NULL;
+        //uint32_t l_size;
 
          struct option l_long_options[] = 
                 {
                 {"help",        0, 0, 'h'},
                 {"file",        1, 0, 'f'},
                 {"search",      1, 0, 's'},
-                {"type",        1, 0,  't'},
                 {0, 0, 0, 0}
                 };
 
-        while ((l_opt = getopt_long_only(argc, argv, "hf:s:t:", l_long_options, &l_option_index)) != -1)
+        while ((l_opt = getopt_long_only(argc, argv, "hf:s:", l_long_options, &l_option_index)) != -1)
         {
                 if (optarg)
                 {
@@ -111,15 +84,10 @@ int main(int argc, char** argv)
                 }
                 // -----------------------------------------
                 //  file containing ip's to search
-                // -----------------------------------------
+                // ----------------------------------------
                 case 's':
                 {
                         l_file_search_str = l_arg;
-                        break;
-                }
-                case 't':
-                {
-                        l_type = l_arg;
                         break;
                 }
                 default:
@@ -147,56 +115,38 @@ int main(int argc, char** argv)
                printf("Error opening file: %s.  Reason: %s\n", l_file_load_str.c_str(), strerror(errno));
                return STATUS_ERROR;
         }
-        char l_readline[MAX_READLINE_SIZE];
-        if (l_type == "ipv4")
-        { 
-
-                while(fgets(l_readline, sizeof(l_readline), l_fp))
-                {
-                        size_t l_readline_len = strnlen(l_readline, MAX_READLINE_SIZE);
-                        if(MAX_READLINE_SIZE == l_readline_len)
-                        {
-                                printf("Error: lines must be shorter then %d chars\n", MAX_READLINE_SIZE);
-                                return STATUS_ERROR;
-                        }
-                        l_readline[l_readline_len - 1] = '\0';
-                        TreeAddIP(l_readline, l_tree->ipv4_tree, IPV4_TREE);
-                }
+        ns_waflz::nms* l_nms = NULL;
+        l_s = ns_waflz::create_nms_from_file(&l_nms, l_file_load_str);
+        if(l_s == STATUS_OK)
+        {
+        	printf("ip loaded succesfully\n");
         }
         else
         {
-                while(fgets(l_readline, sizeof(l_readline), l_fp))
-                {
-                        size_t l_readline_len = strnlen(l_readline, MAX_READLINE_SIZE);
-                        if(MAX_READLINE_SIZE == l_readline_len)
-                        {
-                                printf("Error: lines must be shorter then %d chars\n", MAX_READLINE_SIZE);
-                                return STATUS_ERROR;
-                        }
-                        l_readline[l_readline_len - 1] = '\0';
-                        TreeAddIP(l_readline, l_tree->ipv6_tree, IPV6_TREE);
-                }
-                
+            printf("loading ip failed\n");
+            if(l_nms != NULL) { delete l_nms; l_nms = NULL; }
+            return 0;
         }
-        printf("Loading done\n");
-        std::cout<<currentRSS()<<std::endl;
         // -----------------------------------------
-        //  Search ip's
-        // -----------------------------------------
+        //  load ip's
+        // ----------------------------------------- 
         if(l_file_search_str.empty())
         {
+                if(l_nms != NULL) { delete l_nms; l_nms = NULL; }
                 return 0;
         }
-        l_fp = fopen(l_file_search_str.c_str(),"r");
-        if (NULL == l_fp)
-        {
-               printf("Error opening file: %s.  Reason: %s\n", l_file_search_str.c_str(), strerror(errno));
-               return STATUS_ERROR;
-        }
-        
-        printf("Searching  ips\n");
+
+        ///printf("Searching\n");
         double l_total_time;
         clock_t l_start, l_end;
+        bool ao_output = false;
+
+        l_fp = fopen(l_file_search_str.c_str(), "r");
+        if(NULL == l_fp)
+        {
+                printf("Error opening file: %s. Reason: %s\n", l_file_search_str.c_str(), strerror(errno));
+                return STATUS_ERROR;
+        }
         char l_rline[MAX_READLINE_SIZE];
         l_start = clock();
         while(fgets(l_rline, sizeof(l_rline), l_fp))
@@ -208,7 +158,7 @@ int main(int argc, char** argv)
                 }
                 else if(l_rline_len == MAX_READLINE_SIZE)
                 {
-                        if(l_tree) { delete l_tree; l_tree = NULL;}
+                        if(l_nms) { delete l_nms; l_nms = NULL;}
                         return STATUS_ERROR;
                 }
                 // nuke endline
@@ -219,16 +169,21 @@ int main(int argc, char** argv)
                 {
                         continue;
                 }
-                l_s = tree_contains_ip(l_tree, l_line.c_str(), &l_err_msg);
+                l_s = l_nms->contains(ao_output, l_line.c_str(), l_line.length());
+                if(ao_output)
+                {
+                    //printf("%d\n", ao_output);
+                }
         }
         l_end = clock();
         l_total_time = ((double)(l_end-l_start)) / CLOCKS_PER_SEC;
-        printf("time taken to search:%f\n", l_total_time);
-
-        if(l_tree)
+        printf("Search time:%f\n", l_total_time);
+                
+cleanup:
+        if(l_nms != NULL)
         {
-                delete l_tree;
-                l_tree = NULL;
-        }
+            delete l_nms;
+            l_nms = NULL;
+        }    
         return 0;
 }

@@ -226,6 +226,11 @@ int32_t nms::add_ipv4_plain(const char *a_buf, uint32_t a_buf_len)
         struct in_addr l_in;
         int l_s;
         l_s = inet_pton(AF_INET, a_buf, &l_in);
+        bool ao_redundant=FALSE;
+        contains_ipv4(ao_redundant, a_buf, a_buf_len);
+        if(ao_redundant) {
+                return WAFLZ_STATUS_OK;
+        }
         if(l_s != 1)
         {
                 // TODO log reason???
@@ -333,6 +338,11 @@ int32_t nms::add_ipv4(const char *a_buf, uint32_t a_buf_len)
 //: ----------------------------------------------------------------------------
 int32_t nms::add_ipv6_plain(const char *a_buf, uint32_t a_buf_len)
 {
+        bool ao_redundant=FALSE;
+        contains_ipv4(ao_redundant, a_buf, a_buf_len);
+        if(ao_redundant) {
+                return WAFLZ_STATUS_OK;
+        }
         struct in6_addr l_in6;
         int l_s;
         l_s = inet_pton(AF_INET6, a_buf, &l_in6);
@@ -472,7 +482,7 @@ int32_t nms::contains_ipv4(bool &ao_match, const char *a_buf, uint32_t a_buf_len
                 // TODO log reason???
                 return WAFLZ_STATUS_ERROR;
         }
-        for(int l_bits=0; l_bits<32; ++l_bits)
+        for(int l_bits=0; l_bits<=32; ++l_bits)
         {
                 const uint32_t l_nm = (l_bits == 0) ? 0 : htonl(~((1 << (32 - l_bits)) - 1));
                 if( ipv4_arr[l_bits].find(l_nm & l_in.s_addr) != ipv4_arr[l_bits].end())
@@ -504,7 +514,7 @@ int32_t nms::contains_ipv6(bool &ao_match, const char *a_buf, uint32_t a_buf_len
                 // TODO log reason???
                 return WAFLZ_STATUS_ERROR;
         }
-        for(int l_bits=0; l_bits<32; ++l_bits)
+        for(int l_bits=0; l_bits<129; ++l_bits)
         {
                 in6_addr l_masked;
                 for (int i_c = 0; i_c < 4; ++i_c)
@@ -597,6 +607,7 @@ int32_t create_nms_from_str(nms **ao_nms, const std::string &a_str)
 //: ----------------------------------------------------------------------------
 int32_t create_nms_from_file(nms **ao_nms, const std::string &a_file)
 {
+        std::vector<std::string> nms_vec;
         if(!ao_nms)
         {
                 return WAFLZ_STATUS_ERROR;
@@ -605,7 +616,7 @@ int32_t create_nms_from_file(nms **ao_nms, const std::string &a_file)
         //NDBG_PRINT("%sNMS_FROM_FILE%s: %s\n",ANSI_COLOR_BG_GREEN, ANSI_COLOR_OFF, a_file.c_str());
         FILE * l_fp;
         l_fp = fopen(a_file.c_str(),"r");
-        if (NULL == l_fp)
+        if (l_fp == NULL)
         {
                 //NDBG_PRINT("error opening file: %s.  Reason: %s\n", a_file.c_str(), strerror(errno));
                 return WAFLZ_STATUS_ERROR;
@@ -638,15 +649,16 @@ int32_t create_nms_from_file(nms **ao_nms, const std::string &a_file)
                         continue;
                 }
                 int32_t l_s;
-                l_s = l_nms->add(l_line.c_str(), l_line.length());
-                if(l_s != WAFLZ_STATUS_OK)
-                {
-                        if(l_nms) { delete l_nms; l_nms = NULL;}
-                        return WAFLZ_STATUS_ERROR;
-                }
+                nms_vec.push_back(l_line);
                 //NDBG_PRINT("READLINE: %s\n", l_line.c_str());
         }
+        sort(nms_vec.begin(), nms_vec.end());
+        for(int i = 0;i<nms_vec.size();++i) {
+                l_nms->add(nms_vec[i].c_str(), nms_vec[i].length());
+                std::cout<<nms_vec[i]<<std::endl;
+        }
         *ao_nms = l_nms;
+        std::cout<<l_nms->currentRSS()<<std::endl;
         return WAFLZ_STATUS_OK;
 }
 //: ----------------------------------------------------------------------------

@@ -24,6 +24,11 @@
 //: ----------------------------------------------------------------------------
 //: includes
 //: ----------------------------------------------------------------------------
+#include <iostream>
+#include <unistd.h>
+#include <sys/resource.h>
+#include <mach/mach.h>
+
 #include <set>
 #include <utility>
 #include <unordered_set>
@@ -54,6 +59,14 @@ public:
         ~nms();
         int32_t add(const char *a_buf, uint32_t a_buf_len);
         int32_t contains(bool &ao_match, const char *a_buf, uint32_t a_buf_len);
+        size_t currentRSS()
+        {
+            struct mach_task_basic_info info;
+            mach_msg_type_number_t count = MACH_TASK_BASIC_INFO_COUNT;
+            if (task_info(mach_task_self(), MACH_TASK_BASIC_INFO, (task_info_t)&info, &count) == KERN_SUCCESS)
+                return (size_t)info.resident_size;
+            return (size_t)0; /* query failed */
+        }
 private:
         // -------------------------------------------------
         // private types
@@ -73,12 +86,12 @@ private:
                         return pair.second;
                 }
         };
-        /*struct KeyEq {
+        struct KeyEq {
                 bool operator() (const std::pair<char, uint32_t> pair1, const std::pair<char, uint32_t> pair2) const {
                         return pair1.first == pair2.first && pair1.second==pair2.second;
                 }
-        };*/
-        typedef std::unordered_set<std::pair<char,uint32_t>, Hash> ipv4_set_t;
+        };
+        typedef std::unordered_set<std::pair<char,uint32_t>, Hash, KeyEq> ipv4_set_t;
         typedef std::set<in6_addr, cmp_in6_addr> ipv6_set_t;
         // -------------------------------------------------
         // nested data structure:

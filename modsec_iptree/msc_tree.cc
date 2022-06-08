@@ -11,7 +11,6 @@
  * other questions related to licensing please contact Trustwave Holdings, Inc.
  * directly using the email address security@modsecurity.org.
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

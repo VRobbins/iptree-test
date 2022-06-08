@@ -29,13 +29,14 @@
 #include <sys/resource.h>
 #include <mach/mach.h>
 
-#include <vector>
+#include <map>
 #include <set>
-#include <unordered_set>
 #include <list>
 #include <netinet/in.h>
 #include <string.h>
 #include <string>
+#include <vector>
+#include <utility>
 namespace ns_waflz
 {
 //: ----------------------------------------------------------------------------
@@ -81,8 +82,6 @@ private:
                                            sizeof(a.s6_addr)));
                 }
         };
-        typedef std::set<in_addr_t> ipv4_set_t;
-        typedef std::set<in6_addr, cmp_in6_addr> ipv6_set_t;
         // -------------------------------------------------
         // nested data structure:
         // outer map indexed by subnet mask bits, and inner
@@ -92,6 +91,8 @@ private:
         // largest (i.e., 32 for ipv4 or 128 for ipv6)
         // looking for the ip address.
         // -------------------------------------------------
+        typedef std::set<in6_addr, cmp_in6_addr> ipv6_set_t;
+        typedef std::map<uint32_t, ipv6_set_t> ipv6_mask_map_t;
         // -------------------------------------------------
         // private methods
         // -------------------------------------------------
@@ -107,8 +108,8 @@ private:
         // -------------------------------------------------
         // private members
         // -------------------------------------------------
-        ipv4_set_t* ipv4_arr;
-        ipv6_set_t* ipv6_arr;
+        std::vector<std::pair<char,in_addr_t> > ipv4_arr;
+        ipv6_mask_map_t *m_ipv6_mask_map;
 };
 //: ----------------------------------------------------------------------------
 //: types
