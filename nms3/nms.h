@@ -59,6 +59,7 @@ public:
         ~nms();
         int32_t add(const char *a_buf, uint32_t a_buf_len);
         int32_t contains(bool &ao_match, const char *a_buf, uint32_t a_buf_len);
+        int32_t compress();
 private:
         // -------------------------------------------------
         // private types
@@ -73,7 +74,22 @@ private:
                                            sizeof(a.s6_addr)));
                 }
         };
-        typedef std::set<in_addr_t> ipv4_set_t;
+        struct cmp_in_addr_t {
+                bool operator()(const in_addr_t& a, const in_addr_t& b) const {
+                        in_addr_t a_flip=0;
+                        for(int i = 0; i < 4; ++i) {
+                        const unsigned int byte = (a >> (8 * i)) & 0xff;
+                        a_flip |= byte << (24 - 8 * i);
+                        }
+                        in_addr_t b_flip=0;
+                        for(int i = 0; i < 4; ++i) {
+                        const unsigned int byte = (b >> (8 * i)) & 0xff;
+                        b_flip |= byte << (24 - 8 * i);
+                        }
+                        return a_flip<b_flip;
+                }
+        };
+        typedef std::set<in_addr_t, cmp_in_addr_t> ipv4_set_t;
         typedef std::set<in6_addr, cmp_in6_addr> ipv6_set_t;
         // -------------------------------------------------
         // nested data structure:
@@ -96,6 +112,8 @@ private:
         int32_t add_ipv6_cidr(const char *a_buf, uint32_t a_buf_len);
         int32_t contains_ipv4(bool &ao_match, const char *a_buf, uint32_t a_buf_len);
         int32_t contains_ipv6(bool &ao_match, const char *a_buf, uint32_t a_buf_len);
+        int32_t contains_ipv4_prefix(bool &ao_match, const char *a_buf, uint32_t a_buf_len);
+        int32_t contains_ipv6_prefix(bool &ao_match, const char *a_buf, uint32_t a_buf_len);
         // -------------------------------------------------
         // private members
         // -------------------------------------------------

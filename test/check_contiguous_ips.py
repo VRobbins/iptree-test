@@ -22,7 +22,6 @@ def main():
 	count = 0
 	contiguity_ctr=0
 	temp=0
-
 	while True:
 		line = file_stream.readline();
 		if not line:
@@ -35,6 +34,7 @@ def main():
 		ip = struct.unpack("!L", socket.inet_aton(line))[0]
 		if ip==temp+1:
 			contiguity_ctr += 1
+			print(line)
 		temp = ip
 
 	
