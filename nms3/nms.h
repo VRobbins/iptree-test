@@ -64,16 +64,6 @@ private:
         // -------------------------------------------------
         // private types
         // -------------------------------------------------
-        struct cmp_in6_addr
-        {
-                bool operator()(const in6_addr& a,
-                                const in6_addr& b) const
-                {
-                        return (0 > memcmp(&a.s6_addr,
-                                           &b.s6_addr,
-                                           sizeof(a.s6_addr)));
-                }
-        };
         struct cmp_in_addr_t {
                 bool operator()(const in_addr_t& a, const in_addr_t& b) const {
                         in_addr_t a_flip=0;
@@ -87,6 +77,16 @@ private:
                         b_flip |= byte << (24 - 8 * i);
                         }
                         return a_flip<b_flip;
+                }
+        };
+        struct cmp_in6_addr
+        {
+                bool operator()(const in6_addr& a,
+                                const in6_addr& b) const
+                {
+                        return (0 > memcmp(&a.s6_addr,
+                                           &b.s6_addr,
+                                           sizeof(a.s6_addr)));
                 }
         };
         typedef std::set<in_addr_t, cmp_in_addr_t> ipv4_set_t;
