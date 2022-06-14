@@ -24,14 +24,8 @@
 //: ----------------------------------------------------------------------------
 //: includes
 //: ----------------------------------------------------------------------------
-#include <iostream>
-/*#include <unistd.h>
-#include <sys/resource.h>
-#include <mach/mach.h>*/
 
-#include <vector>
 #include <set>
-#include <unordered_set>
 #include <list>
 #include <netinet/in.h>
 #include <string.h>

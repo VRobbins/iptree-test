@@ -117,7 +117,6 @@ int main(int argc, char** argv)
         }
         ns_waflz::nms* l_nms = NULL;
         l_s = ns_waflz::create_nms_from_file(&l_nms, l_file_load_str);
-        //std::cout<<l_nms->currentRSS()<<std::endl;
         if(l_s == STATUS_OK)
         {
         	printf("ip loaded succesfully\n");
