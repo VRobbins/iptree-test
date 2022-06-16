@@ -178,7 +178,6 @@ int main(int argc, char** argv)
         l_end = clock();
         l_total_time = ((double)(l_end-l_start)) / CLOCKS_PER_SEC;
         printf("Search time:%f\n", l_total_time);
-                
 cleanup:
         if(l_nms != NULL)
         {
