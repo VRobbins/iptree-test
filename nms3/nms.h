@@ -1,18 +1,37 @@
 //: ----------------------------------------------------------------------------
-//: Copyright Edgecast Inc.
+//: Copyright (C) 2017 Verizon.  All Rights Reserved.
+//: All Rights Reserved
 //:
-//: \file:    TODO
+//: \file:    nms.h
 //: \details: TODO
+//: \author:  Reed P Morrison
+//: \date:    08/09/2018
 //:
-//: Licensed under the terms of the Apache 2.0 open source license.
-//: Please refer to the LICENSE file in the project root for the terms.
+//:   Licensed under the Apache License, Version 2.0 (the "License");
+//:   you may not use this file except in compliance with the License.
+//:   You may obtain a copy of the License at
+//:
+//:       http://www.apache.org/licenses/LICENSE-2.0
+//:
+//:   Unless required by applicable law or agreed to in writing, software
+//:   distributed under the License is distributed on an "AS IS" BASIS,
+//:   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//:   See the License for the specific language governing permissions and
+//:   limitations under the License.
+//:
 //: ----------------------------------------------------------------------------
 #ifndef _NMS_H_
 //: ----------------------------------------------------------------------------
 //: includes
 //: ----------------------------------------------------------------------------
+#include <iostream>
+/*#include <unistd.h>
+#include <sys/resource.h>
+#include <mach/mach.h>*/
 
+#include <vector>
 #include <set>
+#include <unordered_set>
 #include <list>
 #include <netinet/in.h>
 #include <string.h>
@@ -33,6 +52,18 @@ public:
                 ADDR_IPV6,
                 ADDR_NONE
         } addr_t;
+        // -------------------------------------------------
+        // public methods
+        // -------------------------------------------------
+        nms();
+        ~nms();
+        int32_t add(const char *a_buf, uint32_t a_buf_len);
+        int32_t contains(bool &ao_match, const char *a_buf, uint32_t a_buf_len);
+        int32_t compress();
+private:
+        // -------------------------------------------------
+        // private types
+        // -------------------------------------------------
         struct cmp_in_addr_t {
                 bool operator()(const in_addr_t& a, const in_addr_t& b) const {
                         in_addr_t a_flip=0;
@@ -60,55 +91,6 @@ public:
         };
         typedef std::set<in_addr_t, cmp_in_addr_t> ipv4_set_t;
         typedef std::set<in6_addr, cmp_in6_addr> ipv6_set_t;
-        // -------------------------------------------------
-        // public methods
-        // -------------------------------------------------
-        nms();
-        ~nms();
-        nms(const ns_waflz::nms& a):
-                ipv4_arr(new ipv4_set_t[33]),
-                ipv6_arr(new ipv6_set_t[129])  
-        {
-                set_ipv4_arr(a.get_ipv4_arr());
-                set_ipv6_arr(a.get_ipv6_arr());
-        }
-
-        nms& operator=(const ns_waflz::nms& a) {
-                set_ipv4_arr(a.get_ipv4_arr());
-                set_ipv6_arr(a.get_ipv6_arr());
-                return *this;
-        }
-        int32_t add(const char *a_buf, uint32_t a_buf_len);
-        int32_t contains(bool &ao_match, const char *a_buf, uint32_t a_buf_len);
-        int32_t compress();
-        ipv4_set_t* get_ipv4_arr() const{
-                ipv4_set_t* copy=new ipv4_set_t[33];
-                for(int i=0;i<33;++i) {
-                        copy[i] = ipv4_arr[i];
-                }
-                return copy;
-        }
-        ipv6_set_t* get_ipv6_arr() const {
-                ipv6_set_t* copy=new ipv6_set_t[33];
-                for(int i=0;i<129;++i) {
-                        copy[i] = ipv6_arr[i];
-                }
-                return copy;
-        }
-        void set_ipv4_arr( ipv4_set_t* a_ipv4_arr ) {
-               for(int i = 0;i<33;++i) {
-                *ipv4_arr=a_ipv4_arr[i];
-               }
-        }
-        void set_ipv6_arr( ipv6_set_t* a_ipv6_arr ) {
-               for(int i = 0;i<129;++i) {
-                *ipv6_arr=a_ipv6_arr[i];
-               }
-        }
-private:
-        // -------------------------------------------------
-        // private types
-        // -------------------------------------------------
         // -------------------------------------------------
         // nested data structure:
         // outer map indexed by subnet mask bits, and inner

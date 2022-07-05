@@ -3,91 +3,111 @@ NEW TEST
 ----------------------------------------------------------------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 100 --------------------
 IPV4 | IPs only
+864256
 ip loaded succesfully
-Search time:0.188714
+Search time:0.208692
 
 IPV4 | CIDR
+864256
 ip loaded succesfully
-Search time:0.214033
+Search time:0.254337
 
 IPV6 | IPs only
+876544
 ip loaded succesfully
-Search time:0.655149
+Search time:0.723455
 
 IPV6 | CIDR
+872448
 ip loaded succesfully
-Search time:0.935087
+Search time:1.083557
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 1000 --------------------
 IPV4 | IPs only
+905216
 ip loaded succesfully
-Search time:0.211294
+Search time:0.225288
 
 IPV4 | CIDR
+901120
 ip loaded succesfully
-Search time:0.308040
+Search time:0.338208
 
 IPV6 | IPs only
+921600
 ip loaded succesfully
-Search time:0.657827
+Search time:0.677466
 
 IPV6 | CIDR
+917504
 ip loaded succesfully
-Search time:1.593149
+Search time:1.665915
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 5000 --------------------
 IPV4 | IPs only
+1032192
 ip loaded succesfully
-Search time:0.223096
+Search time:0.227649
 
 IPV4 | CIDR
+1032192
 ip loaded succesfully
-Search time:0.408127
+Search time:0.424520
 
 IPV6 | IPs only
+1118208
 ip loaded succesfully
-Search time:0.699909
+Search time:0.825060
 
 IPV6 | CIDR
+1114112
 ip loaded succesfully
-Search time:2.543400
+Search time:2.992078
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 10000 --------------------
 IPV4 | IPs only
+1191936
 ip loaded succesfully
-Search time:0.237201
+Search time:0.268726
 
 IPV4 | CIDR
+1191936
 ip loaded succesfully
-Search time:0.504279
+Search time:0.489957
 
 IPV6 | IPs only
+1359872
 ip loaded succesfully
-Search time:0.715845
+Search time:0.823684
 
 IPV6 | CIDR
+1359872
 ip loaded succesfully
-Search time:3.277434
+Search time:3.627551
 
 --------------------------------------------------------
 -------------------- 1 Milllion Requests, ACL SIZE 20000 --------------------
 IPV4 | IPs only
+1523712
 ip loaded succesfully
-Search time:0.257093
+Search time:0.266314
 
 IPV4 | CIDR
+1523712
 ip loaded succesfully
-Search time:0.600763
+Search time:0.604584
 
 IPV6 | IPs only
+1847296
 ip loaded succesfully
-Search time:0.732044
+Search time:0.787416
 
 IPV6 | CIDR
+1839104
 ip loaded succesfully
-Search time:4.016002
+Search time:4.353280
 
 --------------------------------------------------------
